@@ -28,15 +28,33 @@ client.once('ready', () => {
 client.login(token);
 
 client.on('presenceUpdate', (oldPresence, newPresence) => {
-	if(newPresence.activities[0]){
-		console.log(newPresence.user.toString() + ' is now doing ' + newPresence.activities[0].toString());
-	}
-	if(newPresence.user == eye.get(newPresence.user)){ //see if anyone is watching for the user
+	if(eye.has(newPresence.user)){ //see if anyone is watching for the user
 		//dm user who was watching
-		let newDM = newPresence.user.createDM();
-		newDM.then( dmvalue => 
-			dmvalue.send(newPresence.user.username + " has changed their presence")
-		);
+		let alertThisUser = eye.get(newPresence.user);
+		let newDM = alertThisUser.createDM();
+
+		if((newPresence.activities[0])&&(oldPresence.activities[0])){
+			newDM.then( dmvalue =>
+			dmvalue.send(newPresence.user.toString() + ' is done with ' + oldPresence.activities[0].name + ' and is now doing ' + + newPresence.activities[0].name)
+			);
+		}
+		else if(newPresence.activities[0]){
+			newDM.then( dmvalue =>
+			dmvalue.send(newPresence.user.toString() + ' is now doing ' + newPresence.activities[0].name)
+			);
+		}
+		else if(oldPresence.activities[0]){
+			newDM.then( dmvalue => 
+			dmvalue.send(newPresence.user.toString() + ' is done with ' + oldPresence.activities[0].name)
+			);
+		}
+		else{
+			newDM.then( dmvalue => 
+				dmvalue.send(newPresence.user.toString() + ' has changed their presence')
+			);
+		}
+		console.log('Alerted: ' + alertThisUser.username);
+		
 		eye.delete(newPresence.user)
 	}
 });
