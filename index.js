@@ -1,12 +1,13 @@
 // Require the necessary discord.js classes
 const fs = require('node:fs');
-const { Client, Collection, Intents } = require('discord.js');
+const { Client, Collection, Intents, DiscordAPIError } = require('discord.js');
 const { token } = require('./config.json');
 
 // Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_PRESENCES] });
 
 client.commands = new Collection();
+client.curWatch = new Collection();
 
 //Getting the js commands files from the directory
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -25,6 +26,12 @@ client.once('ready', () => {
 
 // Login to Discord with your client's token
 client.login(token);
+
+client.on('presenceUpdate', (oldPresence, newPresence) => {
+	if((client.curWatch.find(newPresence.userId) != undefined)){ //see if anyone is watching for the user
+		console.log(newPresence.user.toString() + ' is now doing ' + newPresence.activities[0].toString());
+	}
+});
 
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
