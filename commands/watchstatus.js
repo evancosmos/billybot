@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
+const { eye } = require('../userEye');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -9,6 +10,9 @@ module.exports = {
 			.setDescription('The user to watch')
 			.setRequired(true)),
 	async execute(interaction) {
-		await interaction.reply('I scream for I am a bot');
+		let watcher = interaction.user;
+		let watchee = interaction.options.getUser('userwatch');
+		eye.set(watcher, watchee);
+		await interaction.reply(watcher.username + ' is now watching ' + watchee.username);
 	},
 };

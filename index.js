@@ -2,12 +2,12 @@
 const fs = require('node:fs');
 const { Client, Collection, Intents, DiscordAPIError } = require('discord.js');
 const { token } = require('./config.json');
+const { eye } = require('./userEye');
 
 // Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_PRESENCES] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.DIRECT_MESSAGES] });
 
 client.commands = new Collection();
-client.curWatch = new Collection();
 
 //Getting the js commands files from the directory
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -28,8 +28,16 @@ client.once('ready', () => {
 client.login(token);
 
 client.on('presenceUpdate', (oldPresence, newPresence) => {
-	if((client.curWatch.find(newPresence.userId) != undefined)){ //see if anyone is watching for the user
+	if(newPresence.activities[0]){
 		console.log(newPresence.user.toString() + ' is now doing ' + newPresence.activities[0].toString());
+	}
+	if(newPresence.user == eye.get(newPresence.user)){ //see if anyone is watching for the user
+		//dm user who was watching
+		let newDM = newPresence.user.createDM();
+		newDM.then( dmvalue => 
+			dmvalue.send(newPresence.user.username + " has changed their presence")
+		);
+		eye.delete(newPresence.user)
 	}
 });
 
