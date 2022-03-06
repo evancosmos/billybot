@@ -1,9 +1,10 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { createrId } = require('../config.json');
+var wideI = false;
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('wideeye')
+		.setName('exeye')
 		.setDescription('Dev command to get all presence data'),
 	async execute(interaction) {
 		if(interaction.user.id == createrId){

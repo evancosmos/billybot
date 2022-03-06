@@ -7,11 +7,17 @@ const fs = require('node:fs');
 
 const commands = [];
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const commandFiles2 = fs.readdirSync('./non-global').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	let noprefix = command.data.name;
 	command.data.setName("dev" + noprefix);
+	commands.push(command.data.toJSON());
+}
+
+for (const file of commandFiles2) {
+	const command = require(`./non-global/${file}`);
 	commands.push(command.data.toJSON());
 }
 

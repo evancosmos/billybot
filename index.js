@@ -21,6 +21,15 @@ for (const file of commandFiles) {
 	client.commands.set("dev" + command.data.name, command); //commands that only appear on dev guild
 }
 
+const commandFiles2 = fs.readdirSync('./non-global').filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles2) {
+	const command = require(`./non-global/${file}`);
+	// Set a new item in the Collection
+	// With the key as the command name and the value as the exported module
+	client.commands.set(command.data.name, command);
+}
+
 // When the client is ready, run this code (only once)
 client.once('ready', () => {
 	console.log('Ready!');
