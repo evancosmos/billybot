@@ -1,12 +1,13 @@
 // Require the necessary discord.js classes
 const fs = require('node:fs');
 const { Client, Collection, Intents, DiscordAPIError } = require('discord.js');
-const { token } = require('./config.json');
-const { eye } = require('./userEye');
+const { token, createrId } = require('./config.json');
+const { eye, wideI } = require('./userEye');
 
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.DIRECT_MESSAGES] });
 
+//Attach to client to keep organized
 client.commands = new Collection();
 
 //Getting the js commands files from the directory
@@ -33,29 +34,33 @@ client.on('presenceUpdate', (oldPresence, newPresence) => {
 		let alertThisUser = eye.get(newPresence.user);
 		let newDM = alertThisUser.createDM();
 
-		if((newPresence.activities[0])&&(oldPresence.activities[0])){
+		if((newPresence)&&(newPresence.activities[0] != null)){
 			newDM.then( dmvalue =>
-			dmvalue.send(newPresence.user.toString() + ' is done with ' + oldPresence.activities[0].name + ' and is now doing ' + + newPresence.activities[0].name)
+			dmvalue.send(newPresence.user.toString() + ' is now doing ' + + newPresence.activities[0].name)
 			);
 		}
-		else if(newPresence.activities[0]){
+		else if(newPresence){
 			newDM.then( dmvalue =>
-			dmvalue.send(newPresence.user.toString() + ' is now doing ' + newPresence.activities[0].name)
-			);
-		}
-		else if(oldPresence.activities[0]){
-			newDM.then( dmvalue => 
-			dmvalue.send(newPresence.user.toString() + ' is done with ' + oldPresence.activities[0].name)
-			);
-		}
-		else{
-			newDM.then( dmvalue => 
-				dmvalue.send(newPresence.user.toString() + ' has changed their presence')
+			dmvalue.send(newPresence.user.toString() + ' is now ' + newPresence.status)
 			);
 		}
 		console.log('Alerted: ' + alertThisUser.username);
 		
-		eye.delete(newPresence.user)
+	}
+	if(wideI){
+		let alertThisUser = client.users.resolve(createrId);
+		let newDM = alertThisUser.createDM();
+
+		if((newPresence)&&(newPresence.activities[0] != null)){
+			newDM.then( dmvalue =>
+			dmvalue.send(newPresence.user.toString() + ' is now doing ' + + newPresence.activities[0].name)
+			);
+		}
+		else if(newPresence){
+			newDM.then( dmvalue =>
+			dmvalue.send(newPresence.user.toString() + ' is now ' + newPresence.status)
+			);
+		}
 	}
 });
 

@@ -3,8 +3,8 @@ const { eye } = require('../userEye');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('watchstatus')
-		.setDescription('Get alerted when a user rich presence status changes')
+		.setName('eyeopen')
+		.setDescription('Get alerted when a user presence changes')
 		.addUserOption(option =>
 			option.setName('userwatch')
 			.setDescription('The user to watch')
