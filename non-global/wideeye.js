@@ -21,4 +21,7 @@ module.exports = {
             await interaction.reply('Sorry, this is only for extromes debugging');
         }
 	},
+    wideBool(){
+        return wideI;
+    }
 };
