@@ -2,7 +2,7 @@
 const fs = require('node:fs');
 const { Client, Collection, Intents, DiscordAPIError } = require('discord.js');
 const { token, createrId } = require('./config.json');
-const { eye, wideI } = require('./userEye');
+const { eye } = require('./userEye');
 
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.DIRECT_MESSAGES] });
@@ -18,6 +18,7 @@ for (const file of commandFiles) {
 	// Set a new item in the Collection
 	// With the key as the command name and the value as the exported module
 	client.commands.set(command.data.name, command);
+	client.commands.set("dev" + command.data.name, command); //commands that only appear on dev guild
 }
 
 // When the client is ready, run this code (only once)
@@ -47,11 +48,12 @@ client.on('presenceUpdate', (oldPresence, newPresence) => {
 		console.log('Alerted: ' + alertThisUser.username);
 		
 	}
-	if(wideI){
+	if(false){
+		console.log('inside wideeye');
 		let alertThisUser = client.users.resolve(createrId);
 		let newDM = alertThisUser.createDM();
 
-		if((newPresence)&&(newPresence.activities[0] != null)){
+		if((newPresence)&&(newPresence.activities[0] != null)&&(newPresence.activities[0] != NaN)){
 			newDM.then( dmvalue =>
 			dmvalue.send(newPresence.user.toString() + ' is now doing ' + + newPresence.activities[0].name)
 			);

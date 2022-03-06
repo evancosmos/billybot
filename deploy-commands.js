@@ -10,6 +10,8 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
+	let noprefix = command.data.name;
+	command.data.setName("dev" + noprefix);
 	commands.push(command.data.toJSON());
 }
 
