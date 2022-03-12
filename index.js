@@ -9,7 +9,7 @@ var wideI = false;
 var reaptedGuildUsers = new Collection();
 
 // Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.DIRECT_MESSAGES] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
 
 //Attach to client to keep organized
 client.commands = new Collection();
@@ -104,7 +104,7 @@ client.on('interactionCreate', async interaction => {
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
 
-	if(command.data.name = 'exeye'){
+	/* if(command.data.name = 'exeye'){
 		wideI = command.wideBool();
-	}
+	} */
 });
