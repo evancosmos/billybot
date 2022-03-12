@@ -104,7 +104,7 @@ client.on('interactionCreate', async interaction => {
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
 
-	/* if(command.data.name = 'exeye'){
+	if(command.data.name == 'exeye'){
 		wideI = command.wideBool();
-	} */
+	}
 });
